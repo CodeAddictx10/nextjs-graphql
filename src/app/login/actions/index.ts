@@ -26,8 +26,6 @@ export const login = async (
         });
         return { error: false };
     } catch (error: unknown) {
-        console.log((error as Error).message, "jddhjhdsdsksjk");
-
         return { error: true, message: (error as Error).message };
     }
 };

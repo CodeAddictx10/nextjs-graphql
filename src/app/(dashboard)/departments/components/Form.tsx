@@ -65,7 +65,6 @@ export default function DepartmentForm({ formData }: { formData?: TColumnDef }) 
 
             toast.success("Department has been created succesfully");
         } catch (error) {
-            console.log(error);
             return toast.error((error as Error).message);
         }
     };
