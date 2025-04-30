@@ -4,7 +4,7 @@ import TableSkeletonLoader from "@/components/shared/TableLoader";
 
 export default async function Page() {
     return (
-        <Suspense fallback={<TableSkeletonLoader/>}>
+        <Suspense fallback={<TableSkeletonLoader />}>
             <List />
         </Suspense>
     );

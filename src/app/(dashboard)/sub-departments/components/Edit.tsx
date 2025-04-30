@@ -1,15 +1,15 @@
 import DailogForm from "@/components/shared/DialogForm";
 import { Pencil } from "lucide-react";
-import DepartmentForm from "./Form";
+import SubDepartmentForm from "./Form";
 import { TColumnDef } from "./List";
 
-export default function EditDepartment({ formData }: { formData: TColumnDef }) {
+export default function EditSubDepartment({ formData }: { formData: TColumnDef }) {
     return (
         <DailogForm
-            id={`update-department${formData.id}`}
-            title="Edit Department"
+            id={`update-subdepartment${formData.id}`}
+            title="Edit SubDepartment"
             description={
-                <span>Update Department name. Click update when done</span>
+                <span>Update sub department name. Click update when done</span>
             }
             Trigger={
                 <button>
@@ -20,7 +20,7 @@ export default function EditDepartment({ formData }: { formData: TColumnDef }) {
                     />
                 </button>
             }
-            form={<DepartmentForm formData={formData} />}
+            form={<SubDepartmentForm formData={formData} />}
         />
     );
 }

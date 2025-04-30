@@ -5,7 +5,7 @@ import {
     IconChevronLeft,
     IconChevronRight,
     IconChevronsLeft,
-    IconChevronsRight
+    IconChevronsRight,
 } from "@tabler/icons-react";
 import {
     ColumnDef,
@@ -68,7 +68,7 @@ export function DataTable<T>({
             columnFilters,
             pagination,
         },
-        getRowId: (row) => (row as {id: number}).id.toString(),
+        getRowId: (row) => (row as { id: number }).id.toString(),
         enableRowSelection: true,
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
@@ -141,8 +141,7 @@ export function DataTable<T>({
             </div>
             <div className="flex items-center justify-between px-4">
                 <div className="text-muted-foreground hidden flex-1 text-sm lg:flex">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
+                    {table.getFilteredRowModel().rows.length} item(s).
                 </div>
                 <div className="flex w-full items-center gap-8 lg:w-fit">
                     <div className="hidden items-center gap-2 lg:flex">

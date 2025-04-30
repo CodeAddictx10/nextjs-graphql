@@ -1,41 +1,42 @@
 "use client";
 
 import * as React from "react";
-import { IconHome, IconInnerShadowTop, IconScubaMask } from "@tabler/icons-react";
+import {
+    IconHome,
+    IconInnerShadowTop,
+    IconScubaMask,
+} from "@tabler/icons-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useSession } from "next-auth/react";
 
 const data = {
-    user: {
-        name: "shadcn",
-        email: "m@example.com",
-        avatar: "/avatars/shadcn.jpg",
-    },
     navMain: [
         {
             title: "Departments",
-            url: "#",
+            url: "/departments",
             icon: IconHome,
         },
         {
             title: "SubDepartments",
-            url: "#",
+            url: "/sub-departments",
             icon: IconScubaMask,
         },
     ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { data: session } = useSession();
     return (
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
@@ -58,7 +59,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <NavMain items={data.navMain} />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <NavUser user={{ name: session?.user?.name || "" }} />
             </SidebarFooter>
         </Sidebar>
     );

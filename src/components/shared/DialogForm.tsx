@@ -7,7 +7,7 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog";
 
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 
 export default function DailogForm({
     Trigger,
@@ -27,9 +27,11 @@ export default function DailogForm({
             <DialogTrigger asChild id={id}>
                 {Trigger}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent
+                className="sm:max-w-[425px]"
+                onPointerDownOutside={(event) => event.preventDefault()}>
                 <DialogHeader>
-                    <DialogTitle>{title}</DialogTitle>
+                    <DialogTitle className="text-center">{title}</DialogTitle>
                     <DialogDescription>{description}</DialogDescription>
                 </DialogHeader>
                 {form}

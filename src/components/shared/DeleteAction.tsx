@@ -1,6 +1,5 @@
 "use client";
 import { Loader, Trash2 } from "lucide-react";
-import { useTransition } from "react";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -13,24 +12,33 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "sonner";
+import { TypedDocumentNode, useMutation } from "@apollo/client";
 
-export default function DeleteIcon() {
-    const [isPending, startTransition] = useTransition();
-    const onSubmit = () => {
-        startTransition(async () => {
-            try {
-                toast.success("Record has been deleted successfully");
-                // router.refresh();
-            } catch (error) {
-                toast.error("Uh oh! Something went wrong.", {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    description: (error as any).message,
-                });
-            }
-        });
+type Props = {
+    deleteMutation: TypedDocumentNode;
+    refreshQuery: TypedDocumentNode;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    variables: { [key: string]: any } | undefined;
+};
+export default function DeleteAction({ deleteMutation, refreshQuery, variables }: Props) {
+    const [deleteDepartment, {loading}] = useMutation(deleteMutation, {
+        refetchQueries: [{ query: refreshQuery }],
+        awaitRefetchQueries: true,
+    });
+    const onSubmit = async () => {
+        try {
+            await deleteDepartment({
+                variables,
+            });
+            toast.success("Record has been deleted successfully");
+        } catch (error) {
+            toast.error("Uh oh! Something went wrong.", {
+                description: (error as Error).message,
+            });
+        }
     };
 
-    return isPending ? (
+    return loading ? (
         <Loader size={20} className="text-sm animate-spin" />
     ) : (
         <AlertDialog>
@@ -44,8 +52,7 @@ export default function DeleteIcon() {
                     </AlertDialogTitle>
                     <AlertDialogDescription>
                         This action cannot be undone. This will permanently
-                        delete the record and remove the record from our
-                        servers.
+                        delete the record.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>

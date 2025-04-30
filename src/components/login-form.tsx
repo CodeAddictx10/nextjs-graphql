@@ -1,19 +1,69 @@
+"use client";
+import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useForm } from "react-hook-form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
+} from "@/components/ui/form";
+import { toast } from "sonner";
+import { useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { login } from "@/app/login/actions";
+
+const formSchema = z.object({
+    username: z.string(),
+    password: z.string().min(6),
+});
 
 export function LoginForm({
     className,
     ...props
 }: React.ComponentProps<"div">) {
+    const [isPending, startTransition] = useTransition();
+    const router = useRouter();
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            username: "user",
+            password: "password",
+        },
+    });
+
+    function onSubmit(data: z.infer<typeof formSchema>) {
+        startTransition(async () => {
+            const { error } = await login({ ...data });
+            if (error) {
+                toast.error("Fail to login", {
+                    description: (
+                        <pre className="mt-2 w-[340px] rounded-0 bg-slate-950 p-4">
+                            <code className="text-white">
+                                Invalid email/password
+                            </code>
+                        </pre>
+                    ),
+                });
+                return;
+            } else {
+                toast.success("Successfully login 🎉");
+                return router.push("/departments");
+            }
+        });
+    }
     return (
         <div className={cn("flex flex-col gap-6", className)} {...props}>
             <Card>
@@ -24,37 +74,64 @@ export function LoginForm({
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form>
-                        <div className="flex flex-col gap-6">
-                            <div className="grid gap-3">
-                                <Label htmlFor="username">Username</Label>
-                                <Input
-                                    id="username"
-                                    type="text"
-                                    placeholder="user"
-                                    required
-                                    autoComplete="off"
-                                />
-                            </div>
-                            <div className="grid gap-3">
-                                <div className="flex items-center">
-                                    <Label htmlFor="password">Password</Label>
+                    <Form {...form}>
+                        <form onSubmit={form.handleSubmit(onSubmit)}>
+                            <div className="flex flex-col gap-6">
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="username"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Username</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="username"
+                                                        type="text"
+                                                        placeholder="user"
+                                                        required
+                                                        autoComplete="off"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
                                 </div>
-                                <Input
-                                    id="password"
-                                    type="password"
-                                    placeholder="12345678"
-                                    required
-                                    autoComplete="off"
-                                />
+                                <div className="grid gap-3">
+                                    <FormField
+                                        control={form.control}
+                                        name="password"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>Password</FormLabel>
+                                                <FormControl>
+                                                    <Input
+                                                        id="password"
+                                                        type="password"
+                                                        placeholder="12345678"
+                                                        required
+                                                        autoComplete="off"
+                                                        {...field}
+                                                    />
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <Button
+                                        type="submit"
+                                        disabled={isPending}
+                                        className="w-full cursor-pointer">
+                                        Login
+                                    </Button>
+                                </div>
                             </div>
-                            <div className="flex flex-col gap-3">
-                                <Button type="submit" className="w-full">
-                                    Login
-                                </Button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </Form>
                 </CardContent>
             </Card>
         </div>

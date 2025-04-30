@@ -11,4 +11,5 @@ export type TSubDepartment = {
     name: string;
     createdAt?: Date;
     updatedAt?: Date;
+    department: TDepartment
 };
