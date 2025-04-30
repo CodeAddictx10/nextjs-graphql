@@ -40,7 +40,7 @@ export function LoginForm({
         resolver: zodResolver(formSchema),
         defaultValues: {
             username: "user",
-            password: "password",
+            password: "12345678",
         },
     });
 
@@ -53,7 +53,8 @@ export function LoginForm({
                 });
             } else {
                 toast.success("Successfully login 🎉");
-                return router.push("/departments");
+                window.location.href = "/departments";
+                 return;
             }
         });
     }
@@ -122,7 +123,7 @@ export function LoginForm({
                                         {isPending ? "Submitting..." : "Login"}
                                     </Button>
                                 </div>
-                                <p className="text-xs text-center text-yellow-400">Test account: user/passsword</p>
+                                <p className="text-xs text-center text-yellow-400">Test account: user/12345678</p>
                             </div>
                         </form>
                     </Form>
