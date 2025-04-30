@@ -22,7 +22,6 @@ import {
 } from "@/components/ui/form";
 import { toast } from "sonner";
 import { useTransition } from "react";
-import { useRouter } from "next/navigation";
 import { login } from "@/app/login/actions";
 
 const formSchema = z.object({
@@ -35,7 +34,7 @@ export function LoginForm({
     ...props
 }: React.ComponentProps<"div">) {
     const [isPending, startTransition] = useTransition();
-    const router = useRouter();
+    
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
