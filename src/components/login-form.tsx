@@ -48,16 +48,9 @@ export function LoginForm({
         startTransition(async () => {
             const { error } = await login({ ...data });
             if (error) {
-                toast.error("Fail to login", {
-                    description: (
-                        <pre className="mt-2 w-[340px] rounded-0 bg-slate-950 p-4">
-                            <code className="text-white">
-                                Invalid email/password
-                            </code>
-                        </pre>
-                    ),
+                 toast.error("Fail to login", {
+                    description: "Invalid email/password",
                 });
-                return;
             } else {
                 toast.success("Successfully login 🎉");
                 return router.push("/departments");
@@ -126,9 +119,10 @@ export function LoginForm({
                                         type="submit"
                                         disabled={isPending}
                                         className="w-full cursor-pointer">
-                                        Login
+                                        {isPending ? "Submitting..." : "Login"}
                                     </Button>
                                 </div>
+                                <p className="text-xs text-center text-yellow-400">Test account: user/passsword</p>
                             </div>
                         </form>
                     </Form>
